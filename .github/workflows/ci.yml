@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      sdk_tag:
+        description: "FrameLift release tag to pull the SDK from (default: latest)"
+        required: false
+        type: string
+
+jobs:
+  # Build every example against the *published* FrameLift SDK package. This is the
+  # self-containment proof: it proves the framelift-sdk-<ver>.zip builds a working
+  # plugin outside the FrameLift source tree, with only a C++23 compiler + CMake.
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build g++ unzip
+
+      - name: Download & unpack the FrameLift SDK
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SDK_TAG: ${{ inputs.sdk_tag }}
+        run: |
+          mkdir -p sdk-dl
+          if [ -n "$SDK_TAG" ]; then
+            gh release download "$SDK_TAG" --repo FrameLift/FrameLift \
+              --pattern 'FrameLift-sdk-*.zip' --dir sdk-dl
+          else
+            gh release download --repo FrameLift/FrameLift \
+              --pattern 'FrameLift-sdk-*.zip' --dir sdk-dl
+          fi
+          unzip -q sdk-dl/FrameLift-sdk-*.zip -d sdk
+          echo "FRAMELIFT_SDK_DIR=$GITHUB_WORKSPACE/sdk" >> "$GITHUB_ENV"
+
+      - name: Configure & build the examples
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+            -DFRAMELIFT_SDK_DIR="$FRAMELIFT_SDK_DIR"
+          cmake --build build
+
+      - name: Verify the example package built
+        run: test -f build/packages/framelift.helloplugin.core.so
