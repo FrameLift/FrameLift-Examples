@@ -3,8 +3,7 @@
 #include <framelift/core.h>
 
 // Minimal FrameLift plugin: logs a line on install and registers no UI.
-// Demonstrates that the SDK builds a working plugin DLL with ZERO third-party
-// dependencies (no imgui/spdlog/stb/json needed).
+// The smallest plugin that builds against the SDK — one IModule, no QML surface.
 class HelloPlugin : public ModuleBase
 {
 protected:
@@ -17,5 +16,5 @@ protected:
 };
 
 FRAMELIFT_MODULE_ENTRY(HelloPlugin, {
-    .render = false,
+    .qml = false,
 })

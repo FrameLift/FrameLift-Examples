@@ -1,18 +1,20 @@
 # FrameLift Examples
 
 Worked example plugins for [FrameLift](https://github.com/FrameLift/FrameLift) — a lightweight,
-extensible video player where every feature ships as a runtime-loaded **package** (a DLL the host
-loads at startup). These examples build against the public **FrameLift Plugin SDK** and are a good
-starting point to copy from.
+extensible video player where every feature ships as a runtime-loaded **plugin** (a Qt plugin DLL/SO
+the host loads at startup). These examples build against the public **FrameLift Plugin SDK** and are a
+good starting point to copy from.
 
-> The SDK is **dependency-free**: building a plugin needs only a C++23 compiler and CMake — no
-> imgui, spdlog, stb, or JSON libraries.
+> Building a plugin needs only a C++23 compiler, CMake, and Qt 6 — no third-party UI, logging, image,
+> or JSON libraries.
 
 ## Examples
 
 | Example | What it shows |
 |---------|----------------|
-| [`hello-plugin/`](hello-plugin/) | The minimal plugin: a single non-rendering module that logs a line on install. Proves the SDK builds a working package DLL with zero third-party dependencies. |
+| [`hello-plugin/`](hello-plugin/) | The minimal plugin: a single non-rendering module that logs a line on install. Proves the SDK builds a working plugin DLL/SO with no third-party libraries beyond Qt. |
+| [`clock-overlay/`](clock-overlay/) | **Rendering.** A corner HUD clock — a QObject view-model (`Q_PROPERTY`/`Q_INVOKABLE`) driving an embedded Qt Quick (QML) root, layered over the video by `renderOrder`, with the hidden-surface redraw contract honored. |
+| [`now-playing/`](now-playing/) | **Services & events.** A non-rendering plugin that consumes a host service (`IHistory`), subscribes to and publishes pub/sub events, and registers its own service (`INowPlaying`) for other plugins to query. |
 
 ## Building
 
@@ -25,20 +27,20 @@ These examples build against the published SDK, not the FrameLift source tree.
    ```sh
    cmake -B build -DFRAMELIFT_SDK_DIR=/path/to/framelift-sdk-<ver>
    cmake --build build
-   # -> build/packages/framelift.helloplugin.core.{so,dll}
+   # -> build/plugins/framelift.helloplugin.{so,dll}
    ```
 
    (Alternatively, add the SDK's `cmake/` directory to `CMAKE_PREFIX_PATH` and omit
    `FRAMELIFT_SDK_DIR`.)
 
-Package DLLs are emitted under `build/packages/` with lowercase artifact names — a single-module
-package is `publisher.package.module` (here `framelift.helloplugin.core`).
+Plugin DLLs/SOs are emitted under `build/plugins/` with lowercase artifact names — the artifact is
+`publisher.plugin` (here `framelift.helloplugin`).
 
 ## Running a built plugin
 
-Drop the resulting package DLL into the `packages/` directory next to the `framelift` executable;
-it loads on the next launch. Every module a package carries is enabled by default — to stop one
-loading, set `<module-id>=disabled` in `packages.ini` in the FrameLift config directory.
+Drop the resulting plugin DLL/SO into the `plugins/` directory next to the `framelift` executable;
+it loads on the next launch. Plugins are enabled by default — to stop one loading, set
+`<plugin-id>=disabled` in `plugins.ini` in the FrameLift config directory.
 
 ## Learn more
 

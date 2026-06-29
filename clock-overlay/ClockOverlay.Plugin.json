@@ -1,15 +1,15 @@
 {
   "fileVersion": 1,
-  "id": "framelift.helloplugin",
-  "name": "HelloPlugin",
+  "id": "framelift.clockoverlay",
+  "name": "ClockOverlay",
   "publisher": "FrameLift",
-  "description": "Minimal non-rendering example plugin",
+  "description": "Corner HUD clock — a minimal rendering (QML) example plugin",
   "version": "1.0.0",
   "abi": 1,
   "enabled": true,
   "provides": {
     "features": [
-      "example.hello"
+      "example.clock"
     ]
   },
   "requires": {

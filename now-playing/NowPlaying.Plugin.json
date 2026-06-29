@@ -1,15 +1,15 @@
 {
   "fileVersion": 1,
-  "id": "framelift.helloplugin",
-  "name": "HelloPlugin",
+  "id": "framelift.nowplaying",
+  "name": "NowPlaying",
   "publisher": "FrameLift",
-  "description": "Minimal non-rendering example plugin",
+  "description": "Tracks the current file via services and events — a non-rendering example",
   "version": "1.0.0",
   "abi": 1,
   "enabled": true,
   "provides": {
     "features": [
-      "example.hello"
+      "example.now_playing"
     ]
   },
   "requires": {

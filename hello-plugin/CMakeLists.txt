@@ -3,8 +3,8 @@
 # find_package(FrameLiftSdk) (resolved by the repo-root CMakeLists.txt).
 add_framelift_plugin(HelloPlugin
         PLUGIN_JSON "${CMAKE_CURRENT_SOURCE_DIR}/HelloPlugin.Plugin.json"
-        "${CMAKE_CURRENT_SOURCE_DIR}/core/HelloPlugin.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/core/HelloPlugin.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/HelloPlugin.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/HelloPlugin.h"
         ${FRAMELIFT_SDK_SOURCES}
 )
-target_include_directories(HelloPlugin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/core")
+target_include_directories(HelloPlugin PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")

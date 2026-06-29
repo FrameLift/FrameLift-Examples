@@ -6,11 +6,11 @@
 #
 #   cmake -B build -DFRAMELIFT_SDK_DIR=/path/to/framelift-sdk-<ver>
 #   cmake --build build
-#   # -> build/packages/framelift.helloplugin.core.{so,dll}
+#   # -> build/plugins/framelift.helloplugin.{so,dll}
 #
 # (Alternatively, add the SDK's cmake/ directory to CMAKE_PREFIX_PATH and omit
-# FRAMELIFT_SDK_DIR.) The SDK is dependency-free: only a C++23 compiler and CMake
-# are required — no imgui/spdlog/stb/json.
+# FRAMELIFT_SDK_DIR.) Building a plugin needs only a C++23 compiler, CMake, and
+# Qt 6 — no third-party UI, logging, image, or JSON library.
 cmake_minimum_required(VERSION 3.28)
 project(FrameLiftExamples LANGUAGES CXX)
 
@@ -21,3 +21,5 @@ else ()
 endif ()
 
 add_subdirectory(hello-plugin)
+add_subdirectory(clock-overlay)
+add_subdirectory(now-playing)
