@@ -50,4 +50,4 @@ it loads on the next launch. Plugins are enabled by default — to stop one load
 
 ## License
 
-[zlib](LICENSE)
+[Apache-2.0](LICENSE)
