@@ -2,7 +2,12 @@ name: CI
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+  # Fired by the FrameLift release workflow after a <X.Y.Z> tag publishes a new
+  # SDK zip; client_payload.sdk_tag carries the tag to build against.
+  repository_dispatch:
+    types: [ framelift-release ]
   workflow_dispatch:
     inputs:
       sdk_tag:
@@ -30,7 +35,7 @@ jobs:
       - name: Download & unpack the FrameLift SDK
         env:
           GH_TOKEN: ${{ github.token }}
-          SDK_TAG: ${{ inputs.sdk_tag }}
+          SDK_TAG: ${{ inputs.sdk_tag || github.event.client_payload.sdk_tag }}
         run: |
           mkdir -p sdk-dl
           if [ -n "$SDK_TAG" ]; then
